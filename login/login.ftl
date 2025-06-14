@@ -274,6 +274,41 @@
             border-radius: 4px;
             margin-bottom: 20px;
         }
+
+        .username-with-restart {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+
+        .attempted-username {
+            font-weight: 500;
+            color: #333;
+            flex: 1;
+        }
+
+        .restart-login-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #d14dc3;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .restart-login-link:hover {
+            color: #b23ca4;
+            text-decoration: underline;
+        }
+
+        .restart-icon {
+            margin-right: 5px;
+        }
         
         @media (max-width: 768px) {
             .login-container {
@@ -306,7 +341,20 @@
                 </#if>
                 
                 <div class="form-group">
-                    <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Email" autofocus autocomplete="off" />
+                    <#if auth?has_content && auth.attemptedUsername?has_content>
+                        <!-- Re-authentication mode: show attempted username with restart option -->
+                        <div class="username-with-restart">
+                            <span class="attempted-username">${auth.attemptedUsername}</span>
+                            <#if url.loginRestartFlowUrl?has_content>
+                                <a href="${url.loginRestartFlowUrl}" class="restart-login-link" aria-label="${msg('restartLoginTooltip')}">
+                                    <span class="restart-icon">🔄</span>
+                                    <span>${msg("restartLoginTooltip", "Restart login")}</span>
+                                </a>
+                            </#if>
+                        </div>
+                    <#else>
+                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Email" autofocus autocomplete="off" />
+                    </#if>
                 </div>
                 
                 <div class="form-group">
@@ -375,8 +423,15 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const attemptedUsername = document.querySelector('.attempted-username');
             const firstInput = document.getElementById('username');
-            if (firstInput) {
+            
+            if (attemptedUsername) {
+                // focus on password
+                const passwordInput = document.getElementById('password');
+                if (passwordInput) passwordInput.focus();
+            } else if (firstInput) {
+                // focus on username
                 firstInput.focus();
             }
             
