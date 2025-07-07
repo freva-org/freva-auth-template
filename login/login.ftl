@@ -384,22 +384,19 @@
                 
                 <div class="social-buttons">
                     <#list social.providers as provider>
-                        <#-- TODO: we need to define known providers that have specific icons here -->
-                        <#assign knownProviders = ["google", "github", "linkedin"]>
-                        <#assign useDefaultIcon = true>
-                        <#list knownProviders as knownProvider>
-                            <#if provider.alias?lower_case?contains(knownProvider)>
-                                <#assign useDefaultIcon = false>
-                                <#assign iconName = knownProvider>
-                                <#break>
+                        <#assign providerAlias = provider.alias?lower_case>
+                        <#assign socialIcons = ["google", "github", "linkedin"]>
+                        <#assign providerIcon = "default-idp">
+                        <#assign foundMatch = false>
+                        <#list socialIcons as iconType>
+                            <#if !foundMatch && providerAlias?contains(iconType)>
+                                <#assign providerIcon = iconType>
+                                <#assign foundMatch = true>
                             </#if>
                         </#list>
+                        
                         <a href="${provider.loginUrl}" class="social-button">
-                            <#if useDefaultIcon>
-                                <img src="${url.resourcesPath}/img/default-idp-icon.png" alt="${provider.displayName}">
-                            <#else>
-                                <img src="${url.resourcesPath}/img/${iconName}-icon.png" alt="${provider.displayName}">
-                            </#if>
+                            <img src="${url.resourcesPath}/img/${providerIcon}-icon.png" alt="${provider.displayName}">
                             <span>${provider.displayName}</span>
                         </a>
                     </#list>
