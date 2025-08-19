@@ -105,12 +105,13 @@
         
         .social-buttons {
             display: flex;
+            flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 30px;
         }
         
         .social-button {
-            flex: 1;
+            min-width: 150px;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
