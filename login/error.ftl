@@ -123,7 +123,6 @@
             </div>
         </#if>
         
-        <#-- Check for success message (verification complete) -->
         <#if message?has_content && message.type == 'success'>
             <h1>Authorization Complete</h1>
             <p class="status-message">Your device has been successfully authorized</p>

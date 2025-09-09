@@ -141,7 +141,6 @@
                 <p>${msg("deviceVerificationComplete")}</p>
             </div>
         <#else>
-            <!-- Match exactly what the working version does -->
             <form id="kc-user-verify-device-user-code-form" action="/realms/${realm.name}/device" method="post">
                 <div class="form-group">
                     <input id="device-user-code" name="device_user_code" autocomplete="off" type="text" placeholder="XXXX-XXXX" autofocus maxlength="9" />
