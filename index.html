@@ -28,7 +28,13 @@
     <h1>FREVA Authentication Theme Preview</h1>
   </div>
   <div class="main-content">
-    <div class="tab-navigation"><button class="tab-button active" data-tab="login">Login Page</button></div>
+    <div class="tab-navigation"><button class="tab-button active" data-tab="login">Login Page</button>
+<button class="tab-button " data-tab="error">Error</button>
+<button class="tab-button " data-tab="idp-review-user-profile">Idp review user profile</button>
+<button class="tab-button " data-tab="info">Info</button>
+<button class="tab-button " data-tab="login-oauth-grant">Login oauth grant</button>
+<button class="tab-button " data-tab="login-oauth2-device-verify-user-code">Login oauth2 device verify user code</button>
+<button class="tab-button " data-tab="login-oauth2-grant">Login oauth2 grant</button></div>
     <div class="tab-content"><div id="login" class="tab-panel active">
       <div class="keycloak-template"><!DOCTYPE html>
 <html>
@@ -492,6 +498,1082 @@
 </body>
 </html>
 </div>
+    </div>
+<div id="error" class="tab-panel ">
+      <div class="keycloak-template"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Device Authorization - FREVA Auth Service</title>
+    <link rel="icon" href="#/img/favicon.ico" />
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .status-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .logo img {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .status-message {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .status-description {
+            color: #777;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .secondary-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .secondary-button:hover {
+            background-color: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+        
+        #kc-error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .info-text {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .status-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="status-container">
+        <div class="logo">
+            <img src="#/img/freva.png" alt="Freva" />
+        </div>
+        
+        
+            <div id="kc-error-message">
+                <p></p>
+            </div>
+        
+        
+        
+            <h1>Authorization Complete</h1>
+            <p class="status-message">Your device has been successfully authorized</p>
+            <div class="info-text">
+                <p></p>
+            </div>
+            <p class="status-description">
+                You can now return to your device. The application should automatically continue.
+            </p>
+            <#-- Only show button if not already logged in -->
+            <#if !(message.summary?? && message.summary?contains("already logged"))>
+                <a href="#" class="secondary-button">Return to Login</a>
+            
+            
+        </#if>
+    </div>
+</body>
+</html></div>
+    </div>
+<div id="idp-review-user-profile" class="tab-panel ">
+      <div class="keycloak-template"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>updateProfileTitle</title>
+    <link rel="icon" href="#/img/favicon.ico" />
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .profile-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .logo img {
+            max-height: 60px;
+            width: auto;
+        }
+        .required-fields {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .required {
+            color: #d14dc3;
+        }
+        
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus {
+            outline: none;
+            border-color: #d14dc3;
+            box-shadow: 0 0 0 2px rgba(209, 77, 195, 0.2);
+        }
+        
+        .submit-button {
+            width: 100%;
+            background-color: #d14dc3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .submit-button:hover {
+            background-color: #b23ca4;
+        }
+
+        #kc-error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .field-error {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-container">
+        <div class="logo">
+            <img src="#/img/freva.png" alt="Freva" />
+        </div>
+        
+        <p class="required-fields">* Required fields</p>
+        
+        <h1>Update Account Information</h1>
+        
+        
+            <div id="kc-error-message">
+                <p></p>
+            </div>
+        
+        
+        <form id="kc-update-profile-form" action="#" method="post">
+            <div class="form-group">
+                <label for="email">
+                    email <span class="required">*</span>
+                </label>
+                <input type="email" id="email" name="email" 
+                       value="${(user.email!'')}" 
+                       autocomplete="email" 
+                       autofocus 
+                       readonly />
+                
+                    <div class="field-error">
+                        ${kcSanitize(messagesPerField.get('email'))?no_esc}
+                    </div>
+                
+            </div>
+
+            <div class="form-group">
+                <label for="firstName">
+                    firstName <span class="required">*</span>
+                </label>
+                <input type="text" id="firstName" name="firstName" 
+                       value="${(user.firstName!'')}" 
+                       autocomplete="given-name"
+                       autofocus />
+                
+                    <div class="field-error">
+                        ${kcSanitize(messagesPerField.get('firstName'))?no_esc}
+                    </div>
+                
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">
+                    lastName <span class="required">*</span>
+                </label>
+                <input type="text" id="lastName" name="lastName" 
+                       value="${(user.lastName!'')}" 
+                       autocomplete="family-name" />
+                
+                    <div class="field-error">
+                        ${kcSanitize(messagesPerField.get('lastName'))?no_esc}
+                    </div>
+                
+            </div>
+
+            
+                <div class="form-group">
+                    <label for="username">
+                        username <span class="required">*</span>
+                    </label>
+                    <input type="text" id="username" name="username" 
+                           value="${(user.username!'')}" 
+                           autocomplete="username" />
+                    <#if messagesPerField.existsError('username')>
+                        <div class="field-error">
+                            ${kcSanitize(messagesPerField.get('username'))?no_esc}
+                        </div>
+                    
+                </div>
+            </#if>
+
+            <button type="submit" class="submit-button">
+                doSubmit
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstInput = document.querySelector('input[type="text"], input[type="email"]');
+            if (firstInput && firstInput.hasAttribute('autofocus')) {
+                firstInput.focus();
+            }
+        });
+    </script>
+</body>
+</html></div>
+    </div>
+<div id="info" class="tab-panel ">
+      <div class="keycloak-template"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Device Authorization - FREVA Auth Service</title>
+    <link rel="icon" href="#/img/favicon.ico" />
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .status-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .logo img {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .status-message {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .status-description {
+            color: #777;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .secondary-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .secondary-button:hover {
+            background-color: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+        
+        #kc-error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .info-text {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .status-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="status-container">
+        <div class="logo">
+            <img src="#/img/freva.png" alt="Freva" />
+        </div>
+        
+        
+            <div id="kc-error-message">
+                <p></p>
+            </div>
+        
+        
+        
+            <h1>Authorization Complete</h1>
+            <p class="status-message">Your device has been successfully authorized</p>
+            <div class="info-text">
+                <p></p>
+            </div>
+            <p class="status-description">
+                You can now return to your device. The application should automatically continue.
+            </p>
+            <#-- Only show button if not already logged in -->
+            <#if !(message.summary?? && message.summary?contains("already logged"))>
+                <a href="#" class="secondary-button">Return to Login</a>
+            
+            
+        </#if>
+    </div>
+</body>
+</html></div>
+    </div>
+<div id="login-oauth-grant" class="tab-panel ">
+      <div class="keycloak-template"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>oauthGrantTitle</title>
+    <link rel="icon" href="#/img/favicon.ico" />
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .grant-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .logo img {
+            max-height: 60px;
+            width: auto;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .permissions-list {
+            margin: 20px 0 30px 0;
+        }
+        
+        .permissions-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .permissions-list li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .permissions-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .submit-button {
+            flex: 1;
+            background-color: #d14dc3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-button:hover {
+            background-color: #b23ca4;
+        }
+        
+        .cancel-button {
+            flex: 1;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .cancel-button:hover {
+            background-color: #5a6268;
+        }
+
+        #kc-error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grant-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grant-container">
+        <div class="logo">
+            <img src="#/img/freva.png" alt="Freva" />
+        </div>
+        
+        <h1>Grant Access to ${client.clientId!'client_freva'}</h1>
+        <p class="subtitle">Do you grant these access privileges?</p>
+        
+        
+            <div id="kc-error-message">
+                <p></p>
+            </div>
+        
+        
+        
+            <div class="permissions-list">
+                <ul>
+                    
+                        <li>${advancedMsg(clientScope.consentScreenText)}</li>
+                    
+                </ul>
+            </div>
+        <#else>
+            <div class="permissions-list">
+                <ul>
+                    <li>Offline Access</li>
+                    <li>User roles</li>
+                    <li>openid</li>
+                    <li>User profile</li>
+                    <li>Email address</li>
+                </ul>
+            </div>
+        
+        
+        <form action="#" method="POST">
+            <div class="button-group">
+                <input name="accept" id="kc-accept" type="submit" class="submit-button" value="doYes"/>
+                <input name="cancel" id="kc-cancel" type="submit" class="cancel-button" value="doNo"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html></div>
+    </div>
+<div id="login-oauth2-device-verify-user-code" class="tab-panel ">
+      <div class="keycloak-template"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>deviceLoginTitle</title>
+    <link rel="icon" href="#/img/favicon.ico" />
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .device-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            margin: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .logo img {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #d14dc3;
+            box-shadow: 0 0 0 2px rgba(209, 77, 195, 0.2);
+        }
+        
+        .submit-button {
+            width: 100%;
+            background-color: #d14dc3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-button:hover {
+            background-color: #b23ca4;
+        }
+
+        #kc-error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .info-text {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .device-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-container">
+        <div class="logo">
+            <img src="#/img/freva.png" alt="Freva" />
+        </div>
+        
+        <h1>Device Login</h1>
+        <p class="subtitle">Enter the code provided by your device and click Submit</p>
+        
+        
+            <div id="kc-error-message">
+                <p></p>
+            </div>
+        
+
+        
+            <div class="info-text">
+                <p>deviceVerificationComplete</p>
+            </div>
+        <#else>
+            <form id="kc-user-verify-device-user-code-form" action="/realms//device" method="post">
+                <div class="form-group">
+                    <input id="device-user-code" name="device_user_code" autocomplete="off" type="text" placeholder="XXXX-XXXX" autofocus maxlength="9" />
+                </div>
+                
+                <button type="submit" class="submit-button">
+                    doSubmit
+                </button>
+            </form>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('device-user-code');
+
+            if (input) {
+                if (input.value) {
+                    input.value = formatForDisplay(input.value);
+                }
+
+                input.addEventListener('input', function(e) {
+                    let raw = e.target.value.replace(/[^0-9A-Za-z]/g, '').toUpperCase();
+
+                    if (raw.length > 8) raw = raw.substring(0, 8);
+
+                    e.target.value = formatForDisplay(raw);
+                });
+
+                input.form.addEventListener('submit', function(e) {
+                    const cleanValue = input.value.replace(/[^0-9A-Za-z]/g, '').toUpperCase();
+                    
+                    if (cleanValue.length === 0) {
+                        e.preventDefault();
+                        alert('Please enter a device code');
+                        return false;
+                    }
+                    
+                    input.value = cleanValue;
+                });
+
+                function formatForDisplay(alnum) {
+                    if (!alnum) return '';
+                    if (alnum.length <= 4) return alnum;
+                    return alnum.substring(0, 4) + '-' + alnum.substring(4);
+                }
+            }
+        });
+    </script>
+</body>
+</html></div>
+    </div>
+<div id="login-oauth2-grant" class="tab-panel ">
+      <div class="keycloak-template"><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>oauthGrantTitle</title>
+    <link rel="icon" href="#/img/favicon.ico" />
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .grant-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            margin: 20px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .permissions-list {
+            margin: 20px 0 30px 0;
+        }
+        
+        .permissions-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .permissions-list li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .permissions-list li:last-child {
+            border-bottom: none;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .logo img {
+            max-height: 60px;
+            width: auto;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .submit-button {
+            flex: 1;
+            background-color: #d14dc3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-button:hover {
+            background-color: #b23ca4;
+        }
+        
+        .cancel-button {
+            flex: 1;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .cancel-button:hover {
+            background-color: #5a6268;
+        }
+
+        #kc-error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grant-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grant-container">
+        <div class="logo">
+            <img src="#/img/freva.png" alt="Freva" />
+        </div>
+        
+        <h1>Grant Access to ${client.clientId!'client_freva'}</h1>
+        <p class="subtitle">Do you grant these access privileges?</p>
+        
+        
+            <div id="kc-error-message">
+                <p></p>
+            </div>
+        
+        
+        
+            <div class="permissions-list">
+                <ul>
+                    
+                        <li>${advancedMsg(clientScope.consentScreenText)}</li>
+                    
+                </ul>
+            </div>
+        <#else>
+            <div class="permissions-list">
+                <ul>
+                    <li>Offline Access</li>
+                    <li>User roles</li>
+                    <li>openid</li>
+                    <li>User profile</li>
+                    <li>Email address</li>
+                </ul>
+            </div>
+        
+        
+        <form action="#" method="POST">
+            <div class="button-group">
+                <input name="accept" id="kc-accept" type="submit" class="submit-button" value="doYes"/>
+                <input name="cancel" id="kc-cancel" type="submit" class="cancel-button" value="doNo"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html></div>
     </div></div>
   </div>
   <script>
