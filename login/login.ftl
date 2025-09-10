@@ -354,7 +354,7 @@
                             </#if>
                         </div>
                     <#else>
-                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Email" autofocus autocomplete="off" />
+                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Username" autofocus autocomplete="off" />
                     </#if>
                 </div>
                 
