@@ -38,7 +38,11 @@
 <button class="tab-button " data-tab="login-update-password">Login update password</button>
 <button class="tab-button " data-tab="logout-confirm">Logout confirm</button></div>
     <div class="tab-content"><div id="login" class="tab-panel active">
-      <div class="keycloak-template"><!DOCTYPE html>
+      <div class="keycloak-template">
+
+<#assign realmBaseUrl = url.loginAction?keep_before("/login-actions/")>
+<#assign accountUrl = realmBaseUrl + "/account">
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -47,6 +51,15 @@
     
     <title>Sign In</title>
     <link rel="icon" href="#/img/favicon.ico" />
+
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "rfc4648": "#/vendor/rfc4648/rfc4648.js"
+            }
+        }
+    </script>
     
     <style>
         * {
@@ -284,6 +297,38 @@
             font-size: 16px;
         }
         
+        .passkey-login a.passkey-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d14dc3;
+            border-radius: 4px;
+            background-color: white;
+            color: #d14dc3;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .passkey-login a.passkey-button:hover {
+            background-color: #fbeefa;
+        }
+
+        .passkey-setup-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+            text-decoration: none;
+        }
+
+        .passkey-setup-link:hover {
+            color: #d14dc3;
+            text-decoration: underline;
+        }
+
         .remember-me {
             display: flex;
             align-items: center;
@@ -411,6 +456,7 @@
             
             <div class="footer">
                 <a href="mailto:freva@dkrz.de?subject=Authentication Issue">Customer Support</a>
+                <a href="">Manage account</a>
                 <a href="https://docs.dkrz.de/doc/getting_started/benutzungsrichtlinien.html">Terms of Service</a>
             </div>
         </div>
@@ -636,7 +682,7 @@
             <p class="status-description">
                 You can now return to your device. The application should automatically continue.
             </p>
-            <#-- Only show button if not already logged in -->
+            
             <#if !(message.summary?? && message.summary?contains("already logged"))>
                 <a href="#" class="secondary-button">Return to Login</a>
             
@@ -1005,7 +1051,7 @@
             <p class="status-description">
                 You can now return to your device. The application should automatically continue.
             </p>
-            <#-- Only show button if not already logged in -->
+            
             <#if !(message.summary?? && message.summary?contains("already logged"))>
                 <a href="#" class="secondary-button">Return to Login</a>
             
