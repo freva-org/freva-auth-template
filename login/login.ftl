@@ -8,6 +8,18 @@
     
     <title>${msg("loginTitle",(realm.displayName!''))}</title>
     <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
+
+    <#-- Keycloak's passkey JS imports the bare module "rfc4648"; the stock
+         template.ftl maps it with this import map. Without it the module
+         fails to load and the passkey button does nothing. Must come before
+         any <script type="module">. -->
+    <script type="importmap">
+        {
+            "imports": {
+                "rfc4648": "${url.resourcesCommonPath}/vendor/rfc4648/rfc4648.js"
+            }
+        }
+    </script>
     
     <style>
         * {
