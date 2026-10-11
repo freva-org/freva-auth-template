@@ -1,3 +1,4 @@
+<#import "passkeys.ftl" as passkeys>
 <!DOCTYPE html>
 <html>
 <head>
@@ -244,6 +245,24 @@
             font-size: 16px;
         }
         
+        .passkey-login a.passkey-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d14dc3;
+            border-radius: 4px;
+            background-color: white;
+            color: #d14dc3;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .passkey-login a.passkey-button:hover {
+            background-color: #fbeefa;
+        }
+
         .remember-me {
             display: flex;
             align-items: center;
@@ -354,7 +373,7 @@
                             </#if>
                         </div>
                     <#else>
-                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Username" autofocus autocomplete="off" />
+                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Username" autofocus autocomplete="${(enableWebAuthnConditionalUI?has_content)?then('username webauthn', 'off')}" />
                     </#if>
                 </div>
                 
@@ -377,6 +396,18 @@
                 
                 <button tabindex="4" class="submit-button" type="submit">Sign In</button>
             </form>
+
+            <#-- Passkey login (Keycloak >= 26.4). Renders nothing unless passkeys
+                 are enabled in the WebAuthn Passwordless Policy. Must stay outside
+                 kc-form-login because it brings its own forms. -->
+            <#if enableWebAuthnConditionalUI?has_content>
+                <div class="divider">
+                    <span>Or</span>
+                </div>
+                <div class="passkey-login">
+                    <@passkeys.conditionalUIData />
+                </div>
+            </#if>
             
             <#if social.providers?? && social.providers?size != 0>
                 <div class="divider">
