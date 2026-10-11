@@ -3,6 +3,9 @@ const path = require('path');
 
 function processFtl(content) {
   return content
+    .replace(/<#import [^>]+>/g, '')
+    .replace(/<#--[\s\S]*?-->/g, '')
+    .replace(/<@[^>]+\/>/g, '<a class="passkey-button" href="#">Sign in with Passkey</a>')
     // message replacements
     .replace(/\$\{msg\(['"]([^"']+)['"].*?\)\}/g, (match, p1) => {
       const messages = {

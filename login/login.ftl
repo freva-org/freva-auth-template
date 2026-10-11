@@ -1,3 +1,8 @@
+<#import "passkeys.ftl" as passkeys>
+<#-- Realm base URL (incl. any context path such as /auth), derived from the
+     form action: https://host[/auth]/realms/<realm> -->
+<#assign realmBaseUrl = url.loginAction?keep_before("/login-actions/")>
+<#assign accountUrl = realmBaseUrl + "/account">
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +12,18 @@
     
     <title>${msg("loginTitle",(realm.displayName!''))}</title>
     <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
+
+    <#-- Keycloak's passkey JS imports the bare module "rfc4648"; the stock
+         template.ftl maps it with this import map. Without it the module
+         fails to load and the passkey button does nothing. Must come before
+         any <script type="module">. -->
+    <script type="importmap">
+        {
+            "imports": {
+                "rfc4648": "${url.resourcesCommonPath}/vendor/rfc4648/rfc4648.js"
+            }
+        }
+    </script>
     
     <style>
         * {
@@ -244,6 +261,38 @@
             font-size: 16px;
         }
         
+        .passkey-login a.passkey-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d14dc3;
+            border-radius: 4px;
+            background-color: white;
+            color: #d14dc3;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .passkey-login a.passkey-button:hover {
+            background-color: #fbeefa;
+        }
+
+        .passkey-setup-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+            text-decoration: none;
+        }
+
+        .passkey-setup-link:hover {
+            color: #d14dc3;
+            text-decoration: underline;
+        }
+
         .remember-me {
             display: flex;
             align-items: center;
@@ -354,7 +403,7 @@
                             </#if>
                         </div>
                     <#else>
-                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Username" autofocus autocomplete="off" />
+                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Username" autofocus autocomplete="${(enableWebAuthnConditionalUI?has_content)?then('username webauthn', 'off')}" />
                     </#if>
                 </div>
                 
@@ -377,6 +426,19 @@
                 
                 <button tabindex="4" class="submit-button" type="submit">Sign In</button>
             </form>
+
+            <#-- Passkey login (Keycloak >= 26.4). Renders nothing unless passkeys
+                 are enabled in the WebAuthn Passwordless Policy. Must stay outside
+                 kc-form-login because it brings its own forms. -->
+            <#if enableWebAuthnConditionalUI?has_content>
+                <div class="divider">
+                    <span>Or</span>
+                </div>
+                <div class="passkey-login">
+                    <@passkeys.conditionalUIData />
+                </div>
+                <a class="passkey-setup-link" href="${accountUrl}/account-security/signing-in">No passkey yet? Set one up</a>
+            </#if>
             
             <#if social.providers?? && social.providers?size != 0>
                 <div class="divider">
@@ -410,6 +472,7 @@
             
             <div class="footer">
                 <a href="mailto:freva@dkrz.de?subject=Authentication Issue">Customer Support</a>
+                <a href="${accountUrl}">Manage account</a>
                 <a href="https://docs.dkrz.de/doc/getting_started/benutzungsrichtlinien.html">Terms of Service</a>
             </div>
         </div>
