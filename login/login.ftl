@@ -34,15 +34,14 @@
         }
         
         body {
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
             display: flex;
         }
         
         .login-container {
             display: flex;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
         }
         
         .form-container {
