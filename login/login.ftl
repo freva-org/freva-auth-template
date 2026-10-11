@@ -1,4 +1,8 @@
 <#import "passkeys.ftl" as passkeys>
+<#-- Realm base URL (incl. any context path such as /auth), derived from the
+     form action: https://host[/auth]/realms/<realm> -->
+<#assign realmBaseUrl = url.loginAction?keep_before("/login-actions/")>
+<#assign accountUrl = realmBaseUrl + "/account">
 <!DOCTYPE html>
 <html>
 <head>
@@ -275,6 +279,20 @@
             background-color: #fbeefa;
         }
 
+        .passkey-setup-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #777;
+            text-decoration: none;
+        }
+
+        .passkey-setup-link:hover {
+            color: #d14dc3;
+            text-decoration: underline;
+        }
+
         .remember-me {
             display: flex;
             align-items: center;
@@ -419,6 +437,7 @@
                 <div class="passkey-login">
                     <@passkeys.conditionalUIData />
                 </div>
+                <a class="passkey-setup-link" href="${accountUrl}/account-security/signing-in">No passkey yet? Set one up</a>
             </#if>
             
             <#if social.providers?? && social.providers?size != 0>
@@ -453,6 +472,7 @@
             
             <div class="footer">
                 <a href="mailto:freva@dkrz.de?subject=Authentication Issue">Customer Support</a>
+                <a href="${accountUrl}">Manage account</a>
                 <a href="https://docs.dkrz.de/doc/getting_started/benutzungsrichtlinien.html">Terms of Service</a>
             </div>
         </div>

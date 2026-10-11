@@ -24,6 +24,24 @@ This repo serves as a custom styled Keycloak FTL-based theme for FREVA.
    ```
 
 
+### Theme types
+
+The repository ships two Keycloak theme types. Copy the repository into
+Keycloak's `themes/<name>/` directory and select them per realm under
+**Realm settings → Themes**:
+
+- `login/`: the login pages (login theme).
+- `account/`: the account console (account theme). It extends Keycloak's
+  `keycloak.v3` account console and only changes colours, header and logo,
+  so it keeps working across Keycloak upgrades.
+
+### Passkeys
+
+The login page shows a "Sign in with Passkey" button and a link to set one up
+once passkeys are enabled in **Authentication → Policies → WebAuthn
+Passwordless Policy** (Keycloak 26.4 or newer). Nothing changes while they
+are disabled.
+
 ### Making Theme Changes
 
 1. **Modify FTL templates** in the `login` directory:
