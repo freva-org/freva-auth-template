@@ -83,18 +83,18 @@
             margin-bottom: 24px;
         }
 
-        h1 { font-size: 32px; margin-bottom: 10px; color: #333; }
+        h1 { font-size: 32px; margin-bottom: 10px; color: var(--text); }
 
-        .subtitle { color: #777; margin-bottom: 30px; font-size: 14px; }
+        .subtitle { color: var(--text-muted); margin-bottom: 30px; font-size: 14px; }
 
         .form-group { margin-bottom: 15px; }
 
-        label { display: block; font-size: 14px; color: #555; margin-bottom: 6px; }
+        label { display: block; font-size: 14px; color: var(--text-secondary); margin-bottom: 6px; }
 
         input[type="password"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
         }
@@ -109,7 +109,7 @@
             align-items: center;
             margin: 10px 0 20px;
             font-size: 14px;
-            color: #555;
+            color: var(--text-secondary);
         }
 
         .checkbox-row input[type="checkbox"] {
@@ -132,8 +132,8 @@
         .submit-button:hover { background-color: var(--brand-accent-hover); }
 
         #kc-error-message {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--error-bg);
+            color: var(--error-text);
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
@@ -178,7 +178,7 @@
     <div class="login-container">
         <div class="form-container">
             <#if (properties.loginShowLogo!"false") == "true">
-                <img class="brand-logo" src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" />
+                <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img class="brand-logo" src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
             </#if>
             <h1>${msg("updatePasswordTitle")}</h1>
             <p class="subtitle">${msg("updatePasswordMessage","You need to change your password to activate your account.")}</p>

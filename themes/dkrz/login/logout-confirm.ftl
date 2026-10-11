@@ -22,11 +22,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
         }
         
         .logout-container {
-            background: white;
+            background: var(--surface);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 40px;
@@ -52,13 +52,13 @@
         h1 {
             font-size: 28px;
             margin-bottom: 20px;
-            color: #333;
+            color: var(--text);
         }
         
         .logout-message {
             font-size: 18px;
             margin-bottom: 30px;
-            color: #555;
+            color: var(--text-secondary);
             line-height: 1.5;
         }
         
@@ -106,13 +106,13 @@
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border-subtle);
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .footer a {
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
         
@@ -141,7 +141,7 @@
 <body>
     <div class="logout-container">
         <div class="logo">
-            <img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" />
+            <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
         </div>
         
         <h1>${msg("logoutConfirmTitle")}</h1>

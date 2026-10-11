@@ -114,7 +114,7 @@
         h1 {
             font-size: 32px;
             margin-bottom: 10px;
-            color: #333;
+            color: var(--text);
         }
         
         h2 {
@@ -124,7 +124,7 @@
         }
         
         .subtitle {
-            color: #777;
+            color: var(--text-muted);
             margin-bottom: 30px;
         }
         
@@ -138,20 +138,20 @@
         .social-button {
             min-width: 150px;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            background-color: white;
+            background-color: var(--surface);
             transition: background-color 0.3s;
             text-decoration: none;
-            color: #333;
+            color: var(--text);
         }
         
         .social-button:hover {
-            background-color: #f5f5f5;
+            background-color: var(--surface-hover);
         }
         
         .social-button img {
@@ -163,13 +163,13 @@
             display: flex;
             align-items: center;
             margin: 20px 0;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .divider::before, .divider::after {
             content: "";
             flex: 1;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--border);
         }
         
         .divider span {
@@ -183,7 +183,7 @@
         input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
         }
@@ -209,11 +209,11 @@
             display: flex;
             justify-content: space-between;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .footer a {
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
         
@@ -225,7 +225,7 @@
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .register-link a {
@@ -275,7 +275,7 @@
             padding: 12px;
             border: 1px solid var(--brand-accent);
             border-radius: 4px;
-            background-color: white;
+            background-color: var(--surface);
             color: var(--brand-accent);
             font-size: 16px;
             text-align: center;
@@ -292,7 +292,7 @@
             text-align: center;
             margin-top: 10px;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
 
@@ -317,7 +317,7 @@
             text-align: right;
             margin-top: 10px;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
         
@@ -326,8 +326,8 @@
         }
         
         #kc-error-message {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--error-bg);
+            color: var(--error-text);
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
@@ -337,16 +337,16 @@
             display: flex;
             align-items: center;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
             justify-content: space-between;
             font-size: 16px;
         }
 
         .attempted-username {
             font-weight: 500;
-            color: #333;
+            color: var(--text);
             flex: 1;
         }
 
@@ -389,7 +389,7 @@
     <div class="login-container">
         <div class="form-container">
             <#if (properties.loginShowLogo!"false") == "true">
-                <img class="brand-logo" src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" />
+                <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img class="brand-logo" src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
             </#if>
             <h1>${properties.brandTitle}</h1>
             <p class="subtitle">Sign in to your account</p>

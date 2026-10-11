@@ -22,11 +22,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
         }
         
         .profile-container {
-            background: white;
+            background: var(--surface);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 40px;
@@ -47,7 +47,7 @@
             width: auto;
         }
         .required-fields {
-            color: #777;
+            color: var(--text-muted);
             font-size: 14px;
             margin-bottom: 20px;
         }
@@ -55,7 +55,7 @@
         h1 {
             font-size: 28px;
             margin-bottom: 30px;
-            color: #333;
+            color: var(--text);
         }
         
         .form-group {
@@ -65,7 +65,7 @@
         label {
             display: block;
             margin-bottom: 5px;
-            color: #333;
+            color: var(--text);
             font-weight: 500;
         }
         
@@ -76,7 +76,7 @@
         input[type="text"], input[type="email"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
         }
@@ -105,15 +105,15 @@
         }
 
         #kc-error-message {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--error-bg);
+            color: var(--error-text);
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
         }
 
         .field-error {
-            color: #d32f2f;
+            color: var(--error-strong);
             font-size: 14px;
             margin-top: 5px;
         }
@@ -130,7 +130,7 @@
 <body>
     <div class="profile-container">
         <div class="logo">
-            <img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" />
+            <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
         </div>
         
         <p class="required-fields">* Required fields</p>

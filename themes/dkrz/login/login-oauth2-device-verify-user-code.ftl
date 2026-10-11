@@ -22,11 +22,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
         }
         
         .device-container {
-            background: white;
+            background: var(--surface);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 40px;
@@ -51,11 +51,11 @@
         h1 {
             font-size: 28px;
             margin-bottom: 10px;
-            color: #333;
+            color: var(--text);
         }
         
         .subtitle {
-            color: #777;
+            color: var(--text-muted);
             margin-bottom: 30px;
             font-size: 16px;
         }
@@ -67,7 +67,7 @@
         input[type="text"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
             text-align: center;
@@ -98,15 +98,15 @@
         }
 
         #kc-error-message {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--error-bg);
+            color: var(--error-text);
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
         }
 
         .info-text {
-            background-color: #e3f2fd;
+            background-color: var(--info-bg);
             border-left: 4px solid #2196f3;
             padding: 15px;
             margin-bottom: 20px;
@@ -125,7 +125,7 @@
 <body>
     <div class="device-container">
         <div class="logo">
-            <img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" />
+            <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
         </div>
         
         <h1>Device Login</h1>

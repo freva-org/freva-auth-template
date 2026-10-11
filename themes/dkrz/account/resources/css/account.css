@@ -11,6 +11,9 @@
     --brand-accent-hover: #003d70;
     --brand-accent-soft: #e5eef5;
     --brand-ink: #333;
+    --brand-surface: #fff;
+    --brand-border: #ddd;
+    --brand-border-subtle: #eee;
     /* backdrop for the header logo; the blue DKRZ logo needs white on the
        dark photo header, child themes can set it to transparent */
     --brand-logo-bg: #fff;
@@ -79,10 +82,10 @@
 /* Side navigation: light, like the white form panel of the login page,
    with a magenta marker on the current page. */
 .pf-v5-c-page__sidebar {
-    --pf-v5-c-page__sidebar--BackgroundColor: #fff;
-    background-color: #fff;
+    --pf-v5-c-page__sidebar--BackgroundColor: var(--brand-surface);
+    background-color: var(--brand-surface);
     color: var(--brand-ink);
-    border-right: 1px solid #ddd;
+    border-right: 1px solid var(--brand-border);
 }
 
 .pf-v5-c-page__sidebar .pf-v5-c-nav {
@@ -99,7 +102,7 @@
     --pf-v5-c-nav__link--after--BorderColor: transparent;
     --pf-v5-c-nav__link--hover--after--BorderColor: var(--brand-accent);
     --pf-v5-c-nav__link--m-current--after--BorderColor: var(--brand-accent);
-    --pf-v5-c-nav__item--before--BorderColor: #eee;
+    --pf-v5-c-nav__item--before--BorderColor: var(--brand-border-subtle);
     --pf-v5-c-nav__toggle-icon--Color: var(--brand-muted);
     --pf-v5-c-nav__link--focus--after--BorderColor: var(--brand-accent);
     --pf-v5-c-nav__link--active--after--BorderColor: var(--brand-accent);
@@ -133,10 +136,28 @@
 /* PatternFly's dark-nav separators and current-page marker are drawn by
    pseudo-elements with hardcoded colours, recolour them directly. */
 .pf-v5-c-page__sidebar .pf-v5-c-nav__link::before {
-    border-color: #eee;
+    border-color: var(--brand-border-subtle);
 }
 
 .pf-v5-c-page__sidebar .pf-v5-c-nav__link.pf-m-current::after,
 .pf-v5-c-page__sidebar .pf-v5-c-nav__link:hover::after {
     border-color: var(--brand-accent);
+}
+
+
+/* ------------------------------------------------------------ dark mode
+ * Keycloak sets .pf-v5-theme-dark on <html> when the browser/OS prefers a
+ * dark scheme (darkMode=true in theme.properties). PatternFly darkens the
+ * page itself; we only adjust our own surfaces and the accent, because the
+ * logo blue is too dark to read on a dark background.
+ */
+:root.pf-v5-theme-dark {
+    --brand-accent: #3a8ad4;
+    --brand-accent-hover: #4a96dc;
+    --brand-accent-soft: rgba(58, 138, 212, 0.15);
+    --brand-ink: #e6e6e6;
+    --brand-muted: #9aa0a6;
+    --brand-surface: #1b1d21;
+    --brand-border: #3a3d42;
+    --brand-border-subtle: #2c2f33;
 }
