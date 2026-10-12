@@ -6,9 +6,10 @@
     <meta name="robots" content="noindex, nofollow">
     
     <title>${msg("logoutConfirmTitle")}</title>
-    <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
+    <link rel="icon" href="${url.resourcesPath}/${properties.brandFavicon}" />
     
     <style>
+        <#include "brand-vars.ftl">
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,11 +22,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
         }
         
         .logout-container {
-            background: white;
+            background: var(--surface);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 40px;
@@ -51,13 +52,13 @@
         h1 {
             font-size: 28px;
             margin-bottom: 20px;
-            color: #333;
+            color: var(--text);
         }
         
         .logout-message {
             font-size: 18px;
             margin-bottom: 30px;
-            color: #555;
+            color: var(--text-secondary);
             line-height: 1.5;
         }
         
@@ -69,7 +70,7 @@
         }
         
         .submit-button {
-            background-color: #d14dc3;
+            background-color: var(--brand-accent);
             color: white;
             border: none;
             border-radius: 4px;
@@ -80,7 +81,7 @@
         }
         
         .submit-button:hover {
-            background-color: #b23ca4;
+            background-color: var(--brand-accent-hover);
         }
         
         .secondary-button {
@@ -105,13 +106,13 @@
         .footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border-subtle);
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .footer a {
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
         
@@ -140,7 +141,7 @@
 <body>
     <div class="logout-container">
         <div class="logo">
-            <img src="${url.resourcesPath}/img/freva.png" alt="Freva" />
+            <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
         </div>
         
         <h1>${msg("logoutConfirmTitle")}</h1>
@@ -163,9 +164,9 @@
         </form>
         
         <div class="footer">
-            <a href="mailto:freva@dkrz.de?subject=Authentication Issue">Customer Support</a>
+            <a href="mailto:${properties.supportEmail}?subject=Authentication%20Issue">Customer Support</a>
             <span style="margin: 0 10px;">|</span>
-            <a href="https://docs.dkrz.de/doc/getting_started/benutzungsrichtlinien.html">Terms of Service</a>
+            <a href="${properties.termsUrl}">Terms of Service</a>
         </div>
     </div>
 </body>

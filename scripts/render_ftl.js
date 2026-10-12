@@ -1,8 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-function processFtl(content) {
+function processFtl(content, props = {}, resolveInclude = () => '') {
   return content
+    // inline <#include "file.ftl"> from the theme chain (child first)
+    .replace(/<#include\s+"([^"]+)"\s*>/g, (m, name) => resolveInclude(name))
+    // ${properties.key!'default'} and ${properties.key} from theme.properties
+    .replace(/\$\{properties\.([A-Za-z0-9_]+)!'([^']*)'\}/g, (m, k, d) => props[k] ?? d)
+    .replace(/\$\{properties\.([A-Za-z0-9_]+)\}/g, (m, k) => props[k] ?? '')
+    .replace(/\$\{url\.resourcesPath\}/g, 'resources')
     .replace(/<#import [^>]+>/g, '')
     .replace(/<#--[\s\S]*?-->/g, '')
     .replace(/<@[^>]+\/>/g, '<a class="passkey-button" href="#">Sign in with Passkey</a>')
@@ -117,20 +123,54 @@ function createPreview(templates, outputPath) {
 
 
 
-function processTemplates(dir) {
+const THEMES_DIR = 'themes';
+
+function readProperties(file) {
+  const props = {};
+  if (!fs.existsSync(file)) return props;
+  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
+    const m = line.match(/^\s*([^#!\s][^=]*?)\s*=\s*(.*)$/);
+    if (m) props[m[1]] = m[2].trim();
+  }
+  return props;
+}
+
+// [child, parent, grandparent, ...] for themes that live in this repo.
+// Keycloak's own themes (base, keycloak.v3) end the chain.
+function themeChain(theme, type) {
+  const chain = [];
+  let name = theme;
+  while (name && fs.existsSync(path.join(THEMES_DIR, name, type))) {
+    const dir = path.join(THEMES_DIR, name, type);
+    chain.push(dir);
+    name = readProperties(path.join(dir, 'theme.properties')).parent;
+  }
+  return chain;
+}
+
+function processTemplates(chain) {
+  // theme.properties: parent values first, child overrides
+  const props = {};
+  for (const dir of [...chain].reverse()) {
+    Object.assign(props, readProperties(path.join(dir, 'theme.properties')));
+  }
+  const resolve = (name) => {
+    for (const dir of chain) {
+      const f = path.join(dir, name);
+      if (fs.existsSync(f)) return fs.readFileSync(f, 'utf8');
+    }
+    return '';
+  };
   const templates = {};
-  
-  if (fs.existsSync(dir)) {
-    const files = fs.readdirSync(dir);
-    for (const file of files) {
-      if (file.endsWith('.ftl')) {
-        const ftlPath = path.join(dir, file);
-        const content = fs.readFileSync(ftlPath, 'utf8');
-        templates[file] = processFtl(content);
-      }
+  for (const dir of [...chain].reverse()) {
+    for (const file of fs.readdirSync(dir)) {
+      if (!file.endsWith('.ftl')) continue;
+      const content = fs.readFileSync(path.join(dir, file), 'utf8');
+      // skip partials such as brand-vars.ftl, only full pages get a tab
+      if (!content.includes('<html')) continue;
+      templates[file] = processFtl(content, props, resolve);
     }
   }
-  
   return templates;
 }
 
@@ -162,26 +202,36 @@ function copyDir(source, target) {
   }
 }
 
-
-
 function main() {
-  const inputDir = 'login';
   const outputDir = 'preview-build';
-
   fs.mkdirSync(outputDir, { recursive: true });
 
-  if (fs.existsSync(path.join(inputDir, 'resources'))) {
-    copyResources(path.join(inputDir, 'resources'), outputDir);
+  const themes = fs.readdirSync(THEMES_DIR)
+    .filter((t) => fs.existsSync(path.join(THEMES_DIR, t, 'login')))
+    .sort();
+
+  for (const theme of themes) {
+    const chain = themeChain(theme, 'login');
+    const themeOut = path.join(outputDir, theme);
+    fs.mkdirSync(themeOut, { recursive: true });
+    // parent resources first so the child's files win
+    for (const dir of [...chain].reverse()) {
+      copyResources(path.join(dir, 'resources'), themeOut);
+    }
+    const templates = processTemplates(chain);
+    if (Object.keys(templates).length === 0) {
+      console.error('No templates found for theme', theme);
+      process.exitCode = 1;
+      continue;
+    }
+    createPreview(templates, path.join(themeOut, 'index.html'));
   }
-  
-  const templates = processTemplates(inputDir);
-  
-  if (Object.keys(templates).length > 0) {
-    createPreview(templates, path.join(outputDir, 'index.html'));
-    console.log('Preview created successfully!');
-  } else {
-    console.error('No templates found in', inputDir);
-  }
+
+  const list = themes.map((t) => `<li><a href="${t}/index.html">${t}</a></li>`).join('\n');
+  fs.writeFileSync(path.join(outputDir, 'index.html'),
+    `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Theme previews</title></head>` +
+    `<body style="font-family: system-ui, sans-serif; padding: 2rem"><h1>Keycloak theme previews</h1><ul>${list}</ul></body></html>`);
+  console.log('Preview created successfully!');
 }
 
 if (require.main === module) {

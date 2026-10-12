@@ -1,0 +1,13 @@
+/* Freva colours on top of the dkrz account.css. */
+:root {
+    --brand-accent: #d14dc3;
+    --brand-accent-hover: #b23ca4;
+    --brand-accent-soft: #fbeefa;
+    --brand-logo-bg: transparent;
+}
+
+:root.pf-v5-theme-dark {
+    --brand-accent: #d14dc3;
+    --brand-accent-hover: #e070d4;
+    --brand-accent-soft: rgba(209, 77, 195, 0.15);
+}

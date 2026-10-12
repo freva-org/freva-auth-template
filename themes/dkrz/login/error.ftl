@@ -6,9 +6,10 @@
     <meta name="robots" content="noindex, nofollow">
     
     <title>Device Authorization - ${realm.displayName!''}</title>
-    <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
+    <link rel="icon" href="${url.resourcesPath}/${properties.brandFavicon}" />
     
     <style>
+        <#include "brand-vars.ftl">
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,11 +22,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
         }
         
         .status-container {
-            background: white;
+            background: var(--surface);
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 40px;
@@ -51,17 +52,17 @@
         h1 {
             font-size: 28px;
             margin-bottom: 20px;
-            color: #333;
+            color: var(--text);
         }
         
         .status-message {
             font-size: 18px;
             margin-bottom: 20px;
-            color: #333;
+            color: var(--text);
         }
         
         .status-description {
-            color: #777;
+            color: var(--text-muted);
             margin-bottom: 30px;
             line-height: 1.5;
         }
@@ -87,15 +88,15 @@
         }
         
         #kc-error-message {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--error-bg);
+            color: var(--error-text);
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
         }
         
         .info-text {
-            background-color: #e3f2fd;
+            background-color: var(--info-bg);
             border-left: 4px solid #2196f3;
             padding: 15px;
             margin-bottom: 20px;
@@ -114,7 +115,7 @@
 <body>
     <div class="status-container">
         <div class="logo">
-            <img src="${url.resourcesPath}/img/freva.png" alt="Freva" />
+            <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
         </div>
         
         <#if message?has_content && (message.type != 'success')>

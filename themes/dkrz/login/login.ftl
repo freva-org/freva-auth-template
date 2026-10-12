@@ -11,7 +11,7 @@
     <meta name="robots" content="noindex, nofollow">
     
     <title>${msg("loginTitle",(realm.displayName!''))}</title>
-    <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
+    <link rel="icon" href="${url.resourcesPath}/${properties.brandFavicon}" />
 
     <#-- Keycloak's passkey JS imports the bare module "rfc4648"; the stock
          template.ftl maps it with this import map. Without it the module
@@ -26,6 +26,7 @@
     </script>
     
     <style>
+        <#include "brand-vars.ftl">
         * {
             box-sizing: border-box;
             margin: 0;
@@ -102,10 +103,17 @@
             z-index: 3;
         }
         
+        .brand-logo {
+            display: block;
+            max-width: 210px;
+            max-height: 75px;
+            margin-bottom: 24px;
+        }
+
         h1 {
             font-size: 32px;
             margin-bottom: 10px;
-            color: #333;
+            color: var(--text);
         }
         
         h2 {
@@ -115,7 +123,7 @@
         }
         
         .subtitle {
-            color: #777;
+            color: var(--text-muted);
             margin-bottom: 30px;
         }
         
@@ -129,20 +137,20 @@
         .social-button {
             min-width: 150px;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            background-color: white;
+            background-color: var(--surface);
             transition: background-color 0.3s;
             text-decoration: none;
-            color: #333;
+            color: var(--text);
         }
         
         .social-button:hover {
-            background-color: #f5f5f5;
+            background-color: var(--surface-hover);
         }
         
         .social-button img {
@@ -154,13 +162,13 @@
             display: flex;
             align-items: center;
             margin: 20px 0;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .divider::before, .divider::after {
             content: "";
             flex: 1;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--border);
         }
         
         .divider span {
@@ -174,13 +182,13 @@
         input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             font-size: 16px;
         }
         
         .submit-button {
-            background-color: #d14dc3;
+            background-color: var(--brand-accent);
             color: white;
             border: none;
             border-radius: 4px;
@@ -192,7 +200,7 @@
         }
         
         .submit-button:hover {
-            background-color: #b23ca4;
+            background-color: var(--brand-accent-hover);
         }
         
         .footer {
@@ -200,11 +208,11 @@
             display: flex;
             justify-content: space-between;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .footer a {
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
         
@@ -216,11 +224,11 @@
             text-align: center;
             margin-top: 15px;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
         }
         
         .register-link a {
-            color: #d14dc3;
+            color: var(--brand-accent);
             text-decoration: none;
         }
         
@@ -264,10 +272,10 @@
             display: block;
             width: 100%;
             padding: 12px;
-            border: 1px solid #d14dc3;
+            border: 1px solid var(--brand-accent);
             border-radius: 4px;
-            background-color: white;
-            color: #d14dc3;
+            background-color: var(--surface);
+            color: var(--brand-accent);
             font-size: 16px;
             text-align: center;
             text-decoration: none;
@@ -275,7 +283,7 @@
         }
 
         .passkey-login a.passkey-button:hover {
-            background-color: #fbeefa;
+            background-color: var(--brand-accent-soft);
         }
 
         .passkey-setup-link {
@@ -283,12 +291,12 @@
             text-align: center;
             margin-top: 10px;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
 
         .passkey-setup-link:hover {
-            color: #d14dc3;
+            color: var(--brand-accent);
             text-decoration: underline;
         }
 
@@ -308,7 +316,7 @@
             text-align: right;
             margin-top: 10px;
             font-size: 14px;
-            color: #777;
+            color: var(--text-muted);
             text-decoration: none;
         }
         
@@ -317,8 +325,8 @@
         }
         
         #kc-error-message {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: var(--error-bg);
+            color: var(--error-text);
             padding: 10px;
             border-radius: 4px;
             margin-bottom: 20px;
@@ -328,16 +336,16 @@
             display: flex;
             align-items: center;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            background-color: #f8f9fa;
+            background-color: var(--page-bg);
             justify-content: space-between;
             font-size: 16px;
         }
 
         .attempted-username {
             font-weight: 500;
-            color: #333;
+            color: var(--text);
             flex: 1;
         }
 
@@ -345,13 +353,13 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            color: #d14dc3;
+            color: var(--brand-accent);
             margin-left: 10px;
             font-size: 14px;
         }
 
         .restart-login-link:hover {
-            color: #b23ca4;
+            color: var(--brand-accent-hover);
             text-decoration: underline;
         }
 
@@ -379,7 +387,10 @@
 <body>
     <div class="login-container">
         <div class="form-container">
-            <h1>Freva Auth Service</h1>
+            <#if (properties.loginShowLogo!"false") == "true">
+                <picture><#if (properties.brandDarkMode!"true") == "true" && properties.brandLogoDark?has_content><source srcset="${url.resourcesPath}/${properties.brandLogoDark}" media="(prefers-color-scheme: dark)" /></#if><img class="brand-logo" src="${url.resourcesPath}/${properties.brandLogo}" alt="${properties.brandName}" /></picture>
+            </#if>
+            <h1>${properties.brandTitle}</h1>
             <p class="subtitle">Sign in to your account</p>
             
             <form id="kc-form-login" action="${url.loginAction}" method="post">
@@ -421,7 +432,7 @@
                 
                 <input type="hidden" id="id-hidden-input" name="credentialId" <#if auth.selectedCredential?has_content>value="${auth.selectedCredential}"</#if>/>
                 
-                <a href="https://luv.dkrz.de/password-reset/" class="forgot-password">Forgot password?</a>
+                <a href="${properties.passwordResetUrl}" class="forgot-password">Forgot password?</a>
                 
                 <button tabindex="4" class="submit-button" type="submit">Sign In</button>
             </form>
@@ -466,13 +477,13 @@
             </#if>
             
             <div class="register-link">
-                Don't have an account? <a tabindex="5" href="https://luv.dkrz.de/register/">Sign up</a>
+                Don't have an account? <a tabindex="5" href="${properties.registerUrl}">Sign up</a>
             </div>
             
             <div class="footer">
-                <a href="mailto:freva@dkrz.de?subject=Authentication Issue">Customer Support</a>
+                <a href="mailto:${properties.supportEmail}?subject=Authentication%20Issue">Customer Support</a>
                 <a href="${accountUrl}">Manage account</a>
-                <a href="https://docs.dkrz.de/doc/getting_started/benutzungsrichtlinien.html">Terms of Service</a>
+                <a href="${properties.termsUrl}">Terms of Service</a>
             </div>
         </div>
         
@@ -484,8 +495,8 @@
             <div class="slide slide5"></div>
             <div class="overlay"></div>
             <div class="image-content">
-                <h2>Free Evaluation System Framework</h2>
-                <p class="author">DKRZ</p>
+                <h2>${properties.heroTitle}</h2>
+                <p class="author">${properties.heroSubtitle}</p>
             </div>
             <div class="pagination">
                 <span id="current-slide">1</span> of <span>5</span>
