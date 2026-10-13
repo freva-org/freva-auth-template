@@ -124,10 +124,6 @@ jobs:
           name: screenshots-keycloak-latest
           path: screenshots
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -136,15 +132,14 @@ jobs:
         run: |
           set -eu
           pip install pillow
-          # static template preview as a sub page
-          node scripts/render_ftl.js
-          mkdir -p site
-          cp -r preview-build site/preview
           KC_VERSION="$(cat screenshots/keycloak-version.txt 2>/dev/null || true)" \
             python scripts/test/make_gallery.py screenshots site
 
+      # clean: remove everything else on gh-pages, e.g. the old static
+      # template preview (dkrz/index.html, freva/index.html)
       - name: Publish to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: site
           branch: gh-pages
+          clean: true

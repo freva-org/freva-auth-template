@@ -26,7 +26,8 @@ page](https://freva-org.github.io/freva-auth-template/)
    open preview-build/index.html
    ```
 
-   This is a rough static render. For real screenshots from Keycloak see
+   This is only a rough static render (FreeMarker is faked with search and
+   replace) and is not published. For real screenshots from Keycloak see
    "Tests" and "Gallery" below.
 
 
@@ -158,8 +159,8 @@ A new theme folder is picked up automatically; no test changes needed.
 After a successful test run on `main`, the screenshots from the `latest`
 Keycloak are published to GitHub Pages as a gallery: every theme with its
 login, account console and logout page, light and dark, click to enlarge.
-The static template preview (`scripts/render_ftl.js`) is linked from its
-footer. To build it locally from screenshots:
+It replaces the old static template preview on GitHub Pages. To build it
+locally from screenshots:
 
 ```bash
 pip install pillow
