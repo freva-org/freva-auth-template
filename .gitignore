@@ -1,1 +1,4 @@
 preview-build/
+dist/
+test-screenshots/
+__pycache__/

@@ -1,0 +1,67 @@
+name: Release themes
+
+# Attach the themes to every published release in two formats, both
+# containing all themes (dkrz, freva, ...) so a child theme always ships
+# with its parent:
+#   freva-auth-themes.jar     -> Keycloak's providers/ directory
+#   freva-auth-themes.tar.gz  -> unpack into Keycloak's themes/ directory
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to attach the theme archives to
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      # Build tooling from the current branch, themes from the release tag,
+      # so the workflow also works for tags older than the build script.
+      - name: Checkout tooling
+        uses: actions/checkout@v4
+        with:
+          path: tooling
+
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+          path: release
+
+      - name: Check that every parent theme is included
+        run: sh tooling/scripts/check-parents.sh release
+
+      - name: Build JAR
+        run: |
+          set -eu
+          THEMES_REPO=release sh tooling/scripts/build-jar.sh "$TAG" dist
+          unzip -l "dist/freva-auth-themes-${TAG#v}.jar" | tail -1
+
+      - name: Build tar.gz
+        run: |
+          set -eu
+          # theme folders at the top level, readable by Keycloak's user
+          tar czf "dist/freva-auth-themes-${TAG#v}.tar.gz" -C release/themes \
+            --owner=0 --group=0 --mode='a+rX' --sort=name .
+          tar tzf "dist/freva-auth-themes-${TAG#v}.tar.gz" | head -10
+
+      - name: Add version-less copies and checksums
+        run: |
+          set -eu
+          # stable names for releases/latest/download/... links
+          cp "dist/freva-auth-themes-${TAG#v}.jar" dist/freva-auth-themes.jar
+          cp "dist/freva-auth-themes-${TAG#v}.tar.gz" dist/freva-auth-themes.tar.gz
+          (cd dist && sha256sum ./*.jar ./*.tar.gz > SHA256SUMS && cat SHA256SUMS)
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$TAG" dist/*.jar dist/*.tar.gz dist/SHA256SUMS --clobber

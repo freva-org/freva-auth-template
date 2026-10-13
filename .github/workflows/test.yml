@@ -1,0 +1,150 @@
+name: Test themes
+
+# Builds the theme JAR exactly like a release and runs it in a real Keycloak:
+#   latest  -> catch breaking changes in new Keycloak releases early
+#   26.4    -> oldest supported version (needed for the passkey integration)
+# The weekly run tests new Keycloak releases even when nothing was pushed.
+# On main, the screenshots of the "latest" run are published as a gallery
+# on GitHub Pages.
+on:
+  push:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * 1"   # Mondays 05:17 UTC
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check parent themes
+        run: sh scripts/check-parents.sh
+
+      - name: Build JAR and tar.gz
+        run: |
+          set -eu
+          sh scripts/build-jar.sh test dist
+          tar czf dist/freva-auth-themes-test.tar.gz -C themes \
+            --owner=0 --group=0 --mode='a+rX' --sort=name .
+          unzip -p dist/freva-auth-themes-test.jar META-INF/keycloak-themes.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: theme-archives
+          path: dist/
+
+  keycloak:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        keycloak: ["latest", "26.4"]
+    name: keycloak ${{ matrix.keycloak }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: theme-archives
+          path: dist
+
+      # Production mode with only the JAR in providers/ and no theme
+      # folders, like a real deployment. Keycloak installs the provider
+      # during startup (no --optimized).
+      - name: Start Keycloak
+        run: |
+          set -eu
+          docker run -d --name kc -p 8080:8080 \
+            -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+            -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+            -v "$PWD/dist/freva-auth-themes-test.jar:/opt/keycloak/providers/freva-auth-themes.jar:ro" \
+            "quay.io/keycloak/keycloak:${{ matrix.keycloak }}" \
+            start --http-enabled=true --hostname-strict=false --db=dev-file
+          for i in $(seq 1 90); do
+            curl -sf http://localhost:8080/realms/master >/dev/null && break
+            sleep 2
+          done
+          curl -sf http://localhost:8080/realms/master >/dev/null || { docker logs kc; exit 1; }
+          mkdir -p screenshots
+          docker exec kc /opt/keycloak/bin/kc.sh --version \
+            | sed -n 's/^Keycloak //p' | head -1 > screenshots/keycloak-version.txt
+          echo "Keycloak $(cat screenshots/keycloak-version.txt)"
+
+      - name: Create test realms
+        run: sh scripts/test/setup-realms.sh
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Check themes in the browser
+        env:
+          KC_URL: http://localhost:8080
+          SCREENSHOT_DIR: screenshots
+        run: python scripts/test/check_themes.py
+
+      - name: Check Keycloak log
+        if: always()
+        run: docker logs kc 2>&1 | sh scripts/test/check-log.sh
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-keycloak-${{ matrix.keycloak }}
+          path: screenshots/
+
+      - name: Keycloak log on failure
+        if: failure()
+        run: docker logs kc 2>&1 | tail -200
+
+  gallery:
+    needs: keycloak
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: gallery
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: screenshots-keycloak-latest
+          path: screenshots
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build gallery
+        run: |
+          set -eu
+          pip install pillow
+          # static template preview as a sub page
+          node scripts/render_ftl.js
+          mkdir -p site
+          cp -r preview-build site/preview
+          KC_VERSION="$(cat screenshots/keycloak-version.txt 2>/dev/null || true)" \
+            python scripts/test/make_gallery.py screenshots site
+
+      - name: Publish to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: site
+          branch: gh-pages
