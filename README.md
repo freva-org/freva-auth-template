@@ -1,6 +1,9 @@
 # FREVA Authentication Theme
 
-This repo serves as a custom styled Keycloak FTL-based theme for FREVA.
+This repo serves as a custom styled Keycloak FTL-based themes.
+
+Check out the available themes at the [themes
+page](https://freva-org.github.io/freva-auth-template/)
 
 
 ## Development
@@ -17,7 +20,7 @@ This repo serves as a custom styled Keycloak FTL-based theme for FREVA.
    ```bash
    node scripts/render_ftl.js
    ```
-   
+
 3. preview in browser
    ```bash
    open preview-build/index.html
@@ -196,4 +199,3 @@ are disabled.
 2. **Customize branding** in a theme's `theme.properties`
 
 3. **Test your changes** by running the preview script
-
