@@ -401,7 +401,13 @@
                 </#if>
                 
                 <div class="form-group">
-                    <#if auth?has_content && auth.attemptedUsername?has_content>
+                    <#-- Hide the username field only when Keycloak says the user is
+                         already fixed for this login (usernameHidden, e.g. after a
+                         separate username step or for re-authentication), like the
+                         stock template. auth.attemptedUsername is also set after a
+                         wrong password; hiding the field then would submit the next
+                         attempt without a username (error user_not_found). -->
+                    <#if usernameHidden?? && auth?has_content && auth.attemptedUsername?has_content>
                         <!-- Re-authentication mode: show attempted username with restart option -->
                         <div class="username-with-restart">
                             <span class="attempted-username">${auth.attemptedUsername}</span>
@@ -413,7 +419,7 @@
                             </#if>
                         </div>
                     <#else>
-                        <input tabindex="1" id="username" name="username" value="${(login.username!'')}" type="text" placeholder="Username" autofocus autocomplete="${(enableWebAuthnConditionalUI?has_content)?then('username webauthn', 'off')}" />
+                        <input tabindex="1" id="username" name="username" value="${(login.username!(auth.attemptedUsername)!'')}" type="text" placeholder="Username" autofocus autocomplete="${(enableWebAuthnConditionalUI?has_content)?then('username webauthn', 'off')}" />
                     </#if>
                 </div>
                 
@@ -511,8 +517,8 @@
             const attemptedUsername = document.querySelector('.attempted-username');
             const firstInput = document.getElementById('username');
             
-            if (attemptedUsername) {
-                // focus on password
+            if (attemptedUsername || (firstInput && firstInput.value)) {
+                // username known (re-auth or a failed attempt): focus password
                 const passwordInput = document.getElementById('password');
                 if (passwordInput) passwordInput.focus();
             } else if (firstInput) {

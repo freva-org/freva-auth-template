@@ -3,6 +3,14 @@
 
 
 All notable changes to this project will be documented in this file.
+## [Unreleased]
+## Fixed
+- Login after a wrong password failed with `user_not_found` even with the
+  correct password: the username field was hidden as soon as a username had
+  been tried, so the next attempt was submitted without it. The field is now
+  only hidden when Keycloak marks the username as fixed (`usernameHidden`),
+  like Keycloak's own template, and keeps the typed username.
+- Release upload failed because `gh` ran outside a git checkout.
 ## [v2610.0.0]
 ## Breaking
 - Themes moved into `themes/`: `themes/dkrz` (general DKRZ theme, parent
