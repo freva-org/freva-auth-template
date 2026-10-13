@@ -132,11 +132,10 @@ def build(shots: Path, out: Path) -> int:
     if run and repo:
         meta.append(f'<a href="{esc(server)}/{esc(repo)}/actions/runs/{esc(run)}">test run</a>')
     meta.append(datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"))
-    preview = ' · <a href="preview/">static template preview</a>' if (out / "preview").is_dir() else ""
 
     (out / "index.html").write_text(PAGE.format(
         nav=" ".join(nav), sections="".join(sections),
-        meta=" · ".join(meta), preview=preview,
+        meta=" · ".join(meta),
     ))
     print(f"gallery: {out / 'index.html'} ({len(found)} themes)")
     return 0
@@ -237,7 +236,7 @@ PAGE = """<!doctype html>
   </div>
 </div>
 <main>{sections}</main>
-<footer>{meta}{preview}</footer>
+<footer>{meta}</footer>
 <dialog id="viewer"><img alt=""><p></p></dialog>
 <script>
   const body = document.body;
