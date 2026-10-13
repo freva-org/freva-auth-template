@@ -3,7 +3,7 @@
 
 
 All notable changes to this project will be documented in this file.
-## [Unreleased]
+## [v2610.1.0]
 ## Fixed
 - Login after a wrong password failed with `user_not_found` even with the
   correct password: the username field was hidden as soon as a username had
