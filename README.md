@@ -120,6 +120,33 @@ scripts/build-jar.sh                                    # dist/freva-auth-themes
 tar czf freva-auth-themes.tar.gz -C themes .            # folders
 ```
 
+### Tests
+
+`.github/workflows/test.yml` runs on every push, every pull request to
+`main` and weekly (to catch new Keycloak releases). It
+
+1. checks that every theme's parent is in the repository,
+2. builds the JAR and tar.gz exactly like a release,
+3. starts Keycloak in production mode with only the JAR, against
+   `latest` and `26.4` (the oldest supported version),
+4. creates a `test-<theme>` realm per theme and checks each theme in a
+   headless browser, light and dark: login, account console and logout
+   pages come from the right theme, show the right title, have the passkey
+   button and links, and raise no JavaScript errors,
+5. fails if Keycloak's log shows theme or template errors.
+
+Screenshots of every page are uploaded as workflow artifacts. To run the
+same checks against a local Keycloak (with the JAR in `providers/`):
+
+```bash
+KCADM=/opt/keycloak/bin/kcadm.sh KC_SERVER=http://localhost:8080 \
+  scripts/test/setup-realms.sh
+pip install playwright && python -m playwright install chromium
+KC_URL=http://localhost:8080 python scripts/test/check_themes.py
+```
+
+A new theme folder is picked up automatically; no test changes needed.
+
 ### Adding a theme for another service
 
 1. Create `themes/<name>/login/theme.properties` with `parent=dkrz` and

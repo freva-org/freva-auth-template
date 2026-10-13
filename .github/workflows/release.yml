@@ -37,21 +37,7 @@ jobs:
           path: release
 
       - name: Check that every parent theme is included
-        working-directory: release
-        run: |
-          set -eu
-          status=0
-          for props in themes/*/*/theme.properties; do
-            parent=$(sed -n 's/^parent=//p' "$props")
-            type=$(basename "$(dirname "$props")")
-            # parents shipped by Keycloak itself
-            case "$parent" in ""|base|keycloak|keycloak.v2|keycloak.v3) continue ;; esac
-            if [ ! -f "themes/$parent/$type/theme.properties" ]; then
-              echo "::error file=$props::parent theme '$parent' ($type) is missing"
-              status=1
-            fi
-          done
-          exit $status
+        run: sh tooling/scripts/check-parents.sh release
 
       - name: Build JAR
         run: |
