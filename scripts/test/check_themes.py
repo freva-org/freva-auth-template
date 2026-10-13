@@ -6,6 +6,7 @@ theme, user test/test). For each theme, in light and dark mode:
 - the login page is served from that theme (not a fallback),
 - the page title is the theme's brandTitle,
 - the passkey button and the account/passkey links are present,
+- a wrong password followed by the right one still logs in,
 - the account console loads with the theme's styles,
 - the logout page renders,
 - no JavaScript errors occur.
@@ -117,8 +118,21 @@ def check_theme(browser, theme: str, scheme: str, fails: Failures) -> None:
             f"{tag} passkey setup link present",
         )
 
-    # Account console
+    # Wrong password first: the form must keep sending the username, or
+    # the next attempt fails with user_not_found even with the right password
     page.fill("#username", "test")
+    page.fill("#password", "wrong-password")
+    page.click("button[type=submit], input[type=submit]")
+    page.wait_for_selector("#kc-form-login", timeout=30_000)
+    if login_props:
+        fails.check(
+            page.locator("input[name=username]").count() == 1,
+            f"{tag} username field still submitted after a wrong password",
+        )
+    if page.locator("input[name=username]").count() and not page.input_value("input[name=username]"):
+        page.fill("input[name=username]", "test")
+
+    # Account console (second attempt, correct password)
     page.fill("#password", "test")
     page.click("button[type=submit], input[type=submit]")
     page.wait_for_load_state("networkidle")
