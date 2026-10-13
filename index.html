@@ -1,2 +1,140 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Theme previews</title></head><body style="font-family: system-ui, sans-serif; padding: 2rem"><h1>Keycloak theme previews</h1><ul><li><a href="dkrz/index.html">dkrz</a></li>
-<li><a href="freva/index.html">freva</a></li></ul></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keycloak Theme Gallery</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --surface: #fff; --text: #1d2125; --muted: #5f6b76;
+    --border: #e1e5ea; --chip: #eef1f4; --chip-on: #1d2125; --chip-on-text: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111316; --surface: #1a1d21; --text: #e7e9ec; --muted: #9aa3ad;
+      --border: #2c3036; --chip: #23272c; --chip-on: #e7e9ec; --chip-on-text: #111316;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  a { color: inherit; }
+  .top {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar {
+    max-width: 1200px; margin: 0 auto; padding: 14px 16px;
+    display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center;
+  }
+  h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
+  .themes { display: flex; gap: 14px; color: var(--muted); }
+  .themes a { text-decoration: none; }
+  .themes a:hover { color: var(--text); text-decoration: underline; }
+  .toggle {
+    margin-left: auto; display: inline-flex; background: var(--chip);
+    border-radius: 999px; padding: 3px;
+  }
+  .toggle button {
+    border: 0; background: transparent; color: var(--muted); font: inherit;
+    padding: 4px 14px; border-radius: 999px; cursor: pointer;
+  }
+  .toggle button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
+  main { max-width: 1200px; margin: 0 auto; padding: 8px 16px 40px; }
+  section { padding-top: 28px; scroll-margin-top: 70px; }
+  .theme-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .theme-head h2 { margin: 0; font-size: 22px; }
+  .subtitle { color: var(--muted); }
+  .tag {
+    font-size: 12px; color: var(--muted); border: 1px solid var(--border);
+    border-radius: 999px; padding: 1px 8px;
+  }
+  .swatch {
+    width: 14px; height: 14px; border-radius: 4px; align-self: center;
+    background: linear-gradient(135deg, var(--accent) 50%, var(--accent-dark) 50%);
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+  .card {
+    margin: 0; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+  .card figcaption { padding: 9px 12px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); }
+  .shot { display: block; line-height: 0; }
+  .shot img { width: 100%; height: auto; display: block; transition: opacity .15s; }
+  .shot:hover img { opacity: .88; }
+  body[data-scheme="light"] .shot[data-scheme="dark"],
+  body[data-scheme="dark"] .shot[data-scheme="light"] { display: none; }
+  body[data-scheme="both"] .card .shot + .shot { border-top: 1px solid var(--border); }
+  footer { max-width: 1200px; margin: 0 auto; padding: 0 16px 32px; color: var(--muted); font-size: 13px; }
+  dialog {
+    border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 94vh;
+  }
+  dialog::backdrop { background: rgba(0, 0, 0, .8); }
+  dialog img { display: block; max-width: 96vw; max-height: 88vh; border-radius: 6px; }
+  dialog p { color: #fff; text-align: center; margin: 10px 0 0; font-size: 14px; }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr; }
+    .toggle { margin-left: 0; }
+  }
+</style>
+</head>
+<body data-scheme="light">
+<div class="top">
+  <div class="bar">
+    <h1>Keycloak Theme Gallery</h1>
+    <nav class="themes" aria-label="Themes"><a href="#dkrz">dkrz</a> <a href="#freva">freva</a></nav>
+    <div class="toggle" role="group" aria-label="Colour scheme">
+      <button type="button" data-set="light" aria-pressed="true">Light</button>
+      <button type="button" data-set="dark" aria-pressed="false">Dark</button>
+      <button type="button" data-set="both" aria-pressed="false">Both</button>
+    </div>
+  </div>
+</div>
+<main>
+<section id="dkrz" style="--accent:#005092;--accent-dark:#3a8ad4">
+  <header class="theme-head">
+    <span class="swatch" aria-hidden="true"></span>
+    <h2>dkrz</h2>
+    <span class="subtitle">DKRZ Login</span>
+    
+  </header>
+  <div class="grid"><figure class="card"><a class="shot" data-scheme="light" href="img/dkrz-light-login.webp" data-caption="dkrz · Login · light"><img src="img/dkrz-light-login-thumb.webp" alt="DKRZ Login, login page, light mode" width="700" height="425" loading="lazy"></a><a class="shot" data-scheme="dark" href="img/dkrz-dark-login.webp" data-caption="dkrz · Login · dark"><img src="img/dkrz-dark-login-thumb.webp" alt="DKRZ Login, login page, dark mode" width="700" height="425" loading="lazy"></a><figcaption>Login</figcaption></figure><figure class="card"><a class="shot" data-scheme="light" href="img/dkrz-light-account.webp" data-caption="dkrz · Account console · light"><img src="img/dkrz-light-account-thumb.webp" alt="DKRZ Login, account console page, light mode" width="700" height="425" loading="lazy"></a><a class="shot" data-scheme="dark" href="img/dkrz-dark-account.webp" data-caption="dkrz · Account console · dark"><img src="img/dkrz-dark-account-thumb.webp" alt="DKRZ Login, account console page, dark mode" width="700" height="425" loading="lazy"></a><figcaption>Account console</figcaption></figure><figure class="card"><a class="shot" data-scheme="light" href="img/dkrz-light-logout.webp" data-caption="dkrz · Logout · light"><img src="img/dkrz-light-logout-thumb.webp" alt="DKRZ Login, logout page, light mode" width="700" height="425" loading="lazy"></a><a class="shot" data-scheme="dark" href="img/dkrz-dark-logout.webp" data-caption="dkrz · Logout · dark"><img src="img/dkrz-dark-logout-thumb.webp" alt="DKRZ Login, logout page, dark mode" width="700" height="425" loading="lazy"></a><figcaption>Logout</figcaption></figure></div>
+</section>
+<section id="freva" style="--accent:#d14dc3;--accent-dark:#d14dc3">
+  <header class="theme-head">
+    <span class="swatch" aria-hidden="true"></span>
+    <h2>freva</h2>
+    <span class="subtitle">Freva Auth Service</span>
+    <span class="tag">parent: dkrz</span>
+  </header>
+  <div class="grid"><figure class="card"><a class="shot" data-scheme="light" href="img/freva-light-login.webp" data-caption="freva · Login · light"><img src="img/freva-light-login-thumb.webp" alt="Freva Auth Service, login page, light mode" width="700" height="425" loading="lazy"></a><a class="shot" data-scheme="dark" href="img/freva-dark-login.webp" data-caption="freva · Login · dark"><img src="img/freva-dark-login-thumb.webp" alt="Freva Auth Service, login page, dark mode" width="700" height="425" loading="lazy"></a><figcaption>Login</figcaption></figure><figure class="card"><a class="shot" data-scheme="light" href="img/freva-light-account.webp" data-caption="freva · Account console · light"><img src="img/freva-light-account-thumb.webp" alt="Freva Auth Service, account console page, light mode" width="700" height="425" loading="lazy"></a><a class="shot" data-scheme="dark" href="img/freva-dark-account.webp" data-caption="freva · Account console · dark"><img src="img/freva-dark-account-thumb.webp" alt="Freva Auth Service, account console page, dark mode" width="700" height="425" loading="lazy"></a><figcaption>Account console</figcaption></figure><figure class="card"><a class="shot" data-scheme="light" href="img/freva-light-logout.webp" data-caption="freva · Logout · light"><img src="img/freva-light-logout-thumb.webp" alt="Freva Auth Service, logout page, light mode" width="700" height="425" loading="lazy"></a><a class="shot" data-scheme="dark" href="img/freva-dark-logout.webp" data-caption="freva · Logout · dark"><img src="img/freva-dark-logout-thumb.webp" alt="Freva Auth Service, logout page, dark mode" width="700" height="425" loading="lazy"></a><figcaption>Logout</figcaption></figure></div>
+</section></main>
+<footer>Rendered by Keycloak 26.8.1 · commit <a href="https://github.com/freva-org/freva-auth-template/commit/013dbe1">013dbe1</a> · <a href="https://github.com/freva-org/freva-auth-template/actions/runs/38435143825">test run</a> · 2026-10-13 17:03 UTC · <a href="preview/">static template preview</a></footer>
+<dialog id="viewer"><img alt=""><p></p></dialog>
+<script>
+  const body = document.body;
+  const buttons = document.querySelectorAll(".toggle button");
+  function setScheme(s) {
+    body.dataset.scheme = s;
+    buttons.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.set === s)));
+    try { localStorage.setItem("gallery-scheme", s); } catch (e) {}
+  }
+  buttons.forEach(b => b.addEventListener("click", () => setScheme(b.dataset.set)));
+  let saved = null;
+  try { saved = localStorage.getItem("gallery-scheme"); } catch (e) {}
+  setScheme(saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+
+  const viewer = document.getElementById("viewer");
+  document.querySelectorAll(".shot").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    viewer.querySelector("img").src = a.href;
+    viewer.querySelector("img").alt = a.querySelector("img").alt;
+    viewer.querySelector("p").textContent = a.dataset.caption;
+    viewer.showModal();
+  }));
+  viewer.addEventListener("click", () => viewer.close());
+</script>
+</body>
+</html>
