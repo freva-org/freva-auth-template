@@ -23,6 +23,9 @@ This repo serves as a custom styled Keycloak FTL-based theme for FREVA.
    open preview-build/index.html
    ```
 
+   This is a rough static render. For real screenshots from Keycloak see
+   "Tests" and "Gallery" below.
+
 
 ### Themes
 
@@ -146,6 +149,19 @@ KC_URL=http://localhost:8080 python scripts/test/check_themes.py
 ```
 
 A new theme folder is picked up automatically; no test changes needed.
+
+### Gallery
+
+After a successful test run on `main`, the screenshots from the `latest`
+Keycloak are published to GitHub Pages as a gallery: every theme with its
+login, account console and logout page, light and dark, click to enlarge.
+The static template preview (`scripts/render_ftl.js`) is linked from its
+footer. To build it locally from screenshots:
+
+```bash
+pip install pillow
+python scripts/test/make_gallery.py test-screenshots site
+```
 
 ### Adding a theme for another service
 
