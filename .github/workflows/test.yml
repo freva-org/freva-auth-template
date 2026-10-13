@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check parent themes
         run: sh scripts/check-parents.sh
@@ -45,7 +45,7 @@ jobs:
         keycloak: ["latest", "26.4"]
     name: keycloak ${{ matrix.keycloak }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/download-artifact@v4
         with:
@@ -117,7 +117,7 @@ jobs:
       group: gallery
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: actions/download-artifact@v4
         with:
